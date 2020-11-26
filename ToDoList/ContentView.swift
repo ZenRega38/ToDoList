@@ -15,6 +15,10 @@ struct ContentView: View {
     @EnvironmentObject var obs : observer
     @State var selected : type = .init(id: "", title: "", msg: "", time: "", day: "")
     
+    let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
     
     var body: some View {
         
@@ -25,13 +29,16 @@ struct ContentView: View {
             ScrollView(.vertical, showsIndicators: false){
                 
                 VStack(spacing: 10){
-                    ForEach(self.obs.datas){ i in
-                        
-                        cellview(edit: self.edit, data: i).onTapGesture {
-                            self.selected = i
-                            self.show.toggle()
-                        }.environmentObject(self.obs)
-                        
+                    
+                    LazyVGrid(columns: columns, spacing: 20){
+                     
+                        ForEach(self.obs.datas){ i in
+                            
+                            cellview(edit: self.edit, data: i).onTapGesture {
+                                self.selected = i
+                                self.show.toggle()
+                            }.environmentObject(self.obs)
+                        }
                     }
                     
                 }.padding()
@@ -59,9 +66,6 @@ struct ContentView: View {
                     .padding(.top,  10)
                     .padding(.bottom)
                     
-                    
-                   
-                    
                 }.background(Rounded().fill(Color.white))
                 
                 Spacer()
@@ -77,7 +81,7 @@ struct ContentView: View {
                     Spacer()
                     
                     Button(action: {
-                        
+                        self.selected = type(id: "", title: "", msg: "", time: "", day: "")
                         self.show.toggle()
                         
                     }){
@@ -115,7 +119,7 @@ struct Rounded : Shape {
     }
 }
 
-//List
+//Grid
 struct cellview : View {
     
     var edit : Bool
@@ -177,7 +181,7 @@ struct SaveView : View {
                 Button(action: {
                     
                     if self.data.id != ""{
-                        self.obs.update(id: self.data.id, msg: self.data.msg, title: self.data.title)
+                        self.obs.update(id: self.data.id, msg: self.msg, title: self.title)
                     }
                     else{
                         self.obs.add(title: self.title, msg: self.msg, date: Date())
