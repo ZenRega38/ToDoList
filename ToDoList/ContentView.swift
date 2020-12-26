@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    
+    @State var bruh = false
     @State var edit = false
     @State var show = false
     @EnvironmentObject var obs : observer
@@ -70,7 +70,6 @@ struct ContentView: View {
                 
                 Spacer()
             }
-            
             
             VStack{
                 
